@@ -194,13 +194,15 @@ class removeattachments extends rcube_plugin
         foreach ($MESSAGE->mime_parts as $mime_id => $part) {
             $mimetype = strtolower($part->ctype_primary . '/' . $part->ctype_secondary);
 
-            if ($mimetype == 'text/html') {
-                $MAIL_MIME->setParam('text_encoding', $part->encoding);
-                $MAIL_MIME->setParam('html_charset', $part->charset);
-            }
-            else if ($mimetype == 'text/plain') {
-                $MAIL_MIME->setParam('html_encoding', $part->encoding);
-                $MAIL_MIME->setParam('text_charset', $part->charset);
+            if (empty($part->disposition) && empty($part->filename)) {
+                if ($mimetype == 'text/html') {
+                    $MAIL_MIME->setParam('text_encoding', $part->encoding);
+                    $MAIL_MIME->setParam('html_charset', $part->charset);
+                }
+                else if ($mimetype == 'text/plain') {
+                    $MAIL_MIME->setParam('html_encoding', $part->encoding);
+                    $MAIL_MIME->setParam('text_charset', $part->charset);
+                }
             }
         }
 
